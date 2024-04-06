@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "699695425752",
+    "project_id": "quoc-duy-ef815",
+    "storage_bucket": "quoc-duy-ef815.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:699695425752:android:21b44795dd1c2b2cc8cfad",
+        "android_client_info": {
+          "package_name": "com.example.quocduy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyg-w1MT5736TxI9OuPrs6jJwQ6LWZcB0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
