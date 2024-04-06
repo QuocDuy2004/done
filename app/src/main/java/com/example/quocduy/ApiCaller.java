@@ -7,7 +7,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -49,7 +48,7 @@ public class ApiCaller {
         getRequestQueue().add(req);
     }
 
-    public  void  makeStringRequest(String url, final ApiResponseListener<String> listener){
+    public void makeStringRequest(String url, final ApiResponseListener<String> listener){
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,  new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -71,50 +70,19 @@ public class ApiCaller {
         addToRequestQueue(stringRequest);
     }
 
-    public void logLogin(String username, String ipAddress, ApiResponseListener<String> listener) {
-        String logUrl = url + "/log/login";
-
-        // Tạo một đối tượng JSON để gửi lên server
-        JSONObject requestData = new JSONObject();
-        try {
-            requestData.put("username", username);
-            requestData.put("ip_address", ipAddress);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        // Tạo một StringRequest để gửi dữ liệu lên server
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, logUrl, requestData,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        listener.onSuccess(response.toString());
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        listener.onError(error.getMessage());
-                    }
-                });
-
-        // Thêm request vào hàng đợi của RequestQueue
-        addToRequestQueue(request);
-    }
-
-
-    public  void   makeJsonArrayRequest(String url, final  ApiResponseListener<JSONArray> listener){
+    public void makeJsonArrayRequest(String url, final ApiResponseListener<String> listener){
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                listener.onSuccess(response);
+                // Chuyển đổi JSONArray thành chuỗi và gửi cho lời gọi onSuccess
 
+                listener.onSuccess(String.valueOf(response));
+//                listener.onSuccess(response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 listener.onError(error.getMessage());
-
             }
         });
         addToRequestQueue(jsonArrayRequest);

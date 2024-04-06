@@ -10,11 +10,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
+import org.w3c.dom.Text;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -27,6 +29,17 @@ public class LoginActivity extends AppCompatActivity {
         EditText txtUsername = findViewById(R.id.txtUser);
         EditText txtPassword = findViewById(R.id.txtPassWord);
         CheckBox remember = findViewById(R.id.remember);
+
+        TextView btnDangki = findViewById(R.id.txtTTK);
+
+        btnDangki.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         ApiCaller apiCaller = ApiCaller.getInstance(this);
 
@@ -44,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 apiCaller.makeStringRequest(apiCaller.url + "/users/name/" + txtUsername.getText().toString(), new ApiCaller.ApiResponseListener<String>() {
                     @Override
                     public void onSuccess(String response) {
