@@ -1,46 +1,40 @@
 package com.example.quocduy.tab_layout;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.example.quocduy.ApiCaller;
 import com.example.quocduy.R;
+import com.google.android.flexbox.FlexboxLayout;
+import com.squareup.picasso.Picasso;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ShopFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import org.json.JSONArray;
+import org.json.JSONException;
+
 public class ShopFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-    static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private ApiCaller apiCaller;
+    private FlexboxLayout flexboxLayout;
 
     public ShopFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ShopFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ShopFragment newInstance(String param1, String param2) {
-        ShopFragment fragment = new ShopFragment();
+    public static HomeFragment newInstance(String param1, String param2) {
+        HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -51,16 +45,63 @@ public class ShopFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        apiCaller = ApiCaller.getInstance(getContext());
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_shop, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        flexboxLayout = view.findViewById(R.id.flexboxLayout);
+        fetchProducts();
+        return view;
+    }
+
+    private void fetchProducts() {
+        apiCaller.makeStringRequest(apiCaller.url + "/products", new ApiCaller.ApiResponseListener<String>() {
+            @Override
+            public void onSuccess(String response) {
+                JSONArray jsonArrayData = apiCaller.stringToJsonArray(response);
+                if (jsonArrayData != null) {
+                    try {
+                        for (int i = 0; i < jsonArrayData.length(); i++) {
+                            String nameProduct = jsonArrayData.getJSONObject(i).getString("title");
+                            String priceProduct = jsonArrayData.getJSONObject(i).getString("price");
+                            String imageProduct = jsonArrayData.getJSONObject(i).getString("photo");
+                            addItemProduct(nameProduct, priceProduct, imageProduct);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Log.e("Error", "JSON không hợp lệ");
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Log.e("Error", errorMessage);
+                // Xử lý khi gọi API không thành công
+            }
+        });
+    }
+
+    private void addItemProduct(String name, String price, String img) {
+        // Tạo một View mới từ layout item_product_cardview
+        View item = LayoutInflater.from(getContext()).inflate(R.layout.item_product_shop, flexboxLayout);
+        TextView textName = item.findViewById(R.id.txtNameProduct);
+        TextView textPrice = item.findViewById(R.id.txtPriceProduct);
+        ImageView imgProduct = item.findViewById(R.id.imageProduct);
+        textName.setText(name);
+        textPrice.setText(price);
+
+        // Sử dụng thư viện Picasso để tải ảnh từ URL và hiển thị trong ImageView
+        Picasso.get()
+                .load(apiCaller.url + "/image/product/" + img)
+                .placeholder(R.drawable.downloading_200) // Ảnh placeholder khi đang tải
+                .error(R.drawable.error_200) // Ảnh mặc định khi tải lỗi
+                .into(imgProduct);
+
+        // Thêm View vào FlexboxLayout
+        flexboxLayout.addView(item);
     }
 }

@@ -32,6 +32,17 @@ public class LoginActivity extends AppCompatActivity {
 
         TextView btnDangki = findViewById(R.id.txtTTK);
 
+        remember.setChecked(getRememberMe(LoginActivity.this));
+        if (remember.isChecked()) {
+            txtUsername.setText(getUsername(LoginActivity.this));
+            txtPassword.setText(getPassword(LoginActivity.this));
+        }
+        if (getUsername(LoginActivity.this).isEmpty()) {
+            remember.setChecked(false);
+            txtUsername.setText("");
+            txtPassword.setText("");
+        }
+
         btnDangki.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

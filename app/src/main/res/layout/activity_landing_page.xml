@@ -1,0 +1,99 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/background_home"
+    tools:context=".LandingPageActivity">
+    <!-- LinearLayout containing ImageView (50% top) -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/vec"
+            android:scaleType="fitXY"
+            android:layout_gravity="bottom"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/giohang"
+            android:paddingEnd="40dp"
+            android:paddingBottom="15dp"
+            android:layout_gravity="end|bottom"/>
+        <ImageView
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="45dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/card" />
+
+    </FrameLayout>
+
+
+    <!-- LinearLayout containing TextView (50% bottom) -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:padding="15dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Online shoppinp sales product"
+            android:gravity="center"
+            android:textColor="#DC1500"
+            android:textSize="35sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Et porttitor et aliquam laoreet in volutpat. Diam enim sagittis quis vestibulum interdum sit. Mauris libero, faucibus quis eget volutpat fringilla. Viverra gravida interdum quis ligula pharetra aenean. Odio tortor, dolor gravida tortor suspendisse "
+            android:gravity="center" />
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/button_lets_go"
+            android:text="Let’s Go"
+            android:paddingStart="50dp"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:gravity="center|start"
+            android:textColor="@color/white"
+            android:background="@drawable/deal_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_margin="20dp"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/textView_icon"
+            android:background="@drawable/right_24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/button_lets_go"
+            app:layout_constraintBottom_toBottomOf="@id/button_lets_go"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="10dp"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</LinearLayout>
