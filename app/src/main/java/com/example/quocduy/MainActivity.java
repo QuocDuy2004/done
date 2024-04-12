@@ -30,15 +30,15 @@ public class MainActivity extends AppCompatActivity {
                             position) {
                         switch (position){
                             case 0:
-                                tab.setIcon(R.drawable.eye);
+                                tab.setIcon(R.drawable.home);
 // tab.setText("Home");
                                 break;
                             case 1:
-                                tab.setIcon(R.drawable.eye);
+                                tab.setIcon(R.drawable.shop);
 // tab.setText("History");
                                 break;
                             case 2:
-                                tab.setIcon(R.drawable.eye);
+                                tab.setIcon(R.drawable.chat);
 // tab.setText("Account");
                                 break;
                         }

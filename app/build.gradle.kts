@@ -29,6 +29,8 @@ android {
 }
 
 dependencies {
+    implementation ("pl.droidsonroids.gif:android-gif-drawable:1.2.22")
+
     implementation ("com.squareup.picasso:picasso:2.71828")
 
     implementation ("org.mindrot:jbcrypt:0.4")

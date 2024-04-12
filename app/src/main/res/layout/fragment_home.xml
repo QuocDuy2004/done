@@ -10,10 +10,6 @@
     <!-- TODO: Update blank fragment layout -->
 
 
-
-
-
-
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -181,18 +177,17 @@
                         android:layout_height="wrap_content"/>
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_marginBottom="15dp"
-                        android:layout_width="140dp"
-                        android:layout_height="40dp"
+                        android:layout_width="100dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="40dp"
+                        android:layout_marginLeft="70dp"
                         android:background="@drawable/radius_viewall">
 
                         <TextView
-                            android:id="@+id/all"
+                            android:id="@+id/allproduct"
                             android:layout_width="match_parent"
                             android:layout_height="30dp"
                             android:layout_marginLeft="10dp"
-                            android:drawableEnd="@drawable/right_24"
                             android:drawablePadding="10dp"
                             android:text="View all"
                             android:textColor="@color/white"
@@ -219,21 +214,21 @@
 
 
             <HorizontalScrollView
-            android:id="@+id/horizontalScrollView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:id="@+id/hcontainer"
+                android:id="@+id/horizontalScrollView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            </LinearLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:id="@+id/hcontainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-             </HorizontalScrollView>
+                </LinearLayout>
 
-    </LinearLayout>
+            </HorizontalScrollView>
+
+        </LinearLayout>
     </ScrollView>
 </FrameLayout>

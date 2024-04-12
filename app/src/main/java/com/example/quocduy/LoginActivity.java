@@ -3,9 +3,10 @@ package com.example.quocduy;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -13,120 +14,140 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.quocduy.ApiCaller;
+import com.example.quocduy.User;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
-import org.w3c.dom.Text;
 
 public class LoginActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        Button btnLogin = findViewById(R.id.btnDangnhap);
-        EditText txtUsername = findViewById(R.id.txtUser);
+        Button btnDN = findViewById(R.id.btnDangnhap);
+        TextView txtRegister = findViewById(R.id.reg);
+        EditText txtUserName = findViewById(R.id.txtUser);
         EditText txtPassword = findViewById(R.id.txtPassWord);
-        CheckBox remember = findViewById(R.id.remember);
-
-        TextView btnDangki = findViewById(R.id.txtTTK);
-
-        remember.setChecked(getRememberMe(LoginActivity.this));
-        if (remember.isChecked()) {
-            txtUsername.setText(getUsername(LoginActivity.this));
-            txtPassword.setText(getPassword(LoginActivity.this));
-        }
-        if (getUsername(LoginActivity.this).isEmpty()) {
-            remember.setChecked(false);
-            txtUsername.setText("");
-            txtPassword.setText("");
-        }
-
-        btnDangki.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
+        CheckBox checkboxRemember = findViewById(R.id.remember);
+        TextView txtForgot = findViewById(R.id.txtforgot);
         ApiCaller apiCaller = ApiCaller.getInstance(this);
 
-        remember.setChecked(getRememberMe(LoginActivity.this));
-        if (remember.isChecked()) {
-            txtUsername.setText(getUsername(LoginActivity.this));
+        checkboxRemember.setChecked(getRememberMe(LoginActivity.this));
+        if (checkboxRemember.isChecked()) {
+            txtUserName.setText(getUsername(LoginActivity.this));
             txtPassword.setText(getPassword(LoginActivity.this));
         }
-        if (getUsername(LoginActivity.this).isEmpty()) {
-            remember.setChecked(false);
-            txtUsername.setText("");
+        if (getUsername(LoginActivity.this).equals("")) {
+            checkboxRemember.setChecked(false);
+            txtUserName.setText("");
             txtPassword.setText("");
         }
-
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        txtForgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                apiCaller.makeStringRequest(apiCaller.url + "/users/name/" + txtUsername.getText().toString(), new ApiCaller.ApiResponseListener<String>() {
-                    @Override
-                    public void onSuccess(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            if (BCrypt.checkpw(txtPassword.getText().toString(), jsonObject.getString("pass"))) {
-                                Toast.makeText(getApplicationContext(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                                if (remember.isChecked()) {
-                                    setUser(LoginActivity.this, txtUsername.getText().toString().trim(),
-                                            txtPassword.getText().toString().trim(), remember.isChecked());
-                                } else {
-                                    setUser(LoginActivity.this, "", "", remember.isChecked());
-                                }
-
-
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.putExtra("userObject", response);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Sai mật khẩu", Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onError(String errorMessage) {
-                        Toast.makeText(getApplicationContext(), "Người dùng không tồn tại!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                startActivity(new
+                        Intent(LoginActivity.this, ForgotActivity.class));
             }
         });
+        btnDN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                apiCaller.makeStringRequest(apiCaller.url +
+                        "/users/name/" + txtUserName.getText().toString(), new
+                        ApiCaller.ApiResponseListener<String>() {
+                            @Override
 
+                            public void onSuccess(String response) {
+
+                                try {
+                                    JSONObject jsonObject = new
+                                            JSONObject(response);
+                                    User.setId(jsonObject.getInt("id"));
+                                    if
+                                    (
+                                            BCrypt.checkpw(txtPassword.getText().toString(), jsonObject.getString("pass"))) {
+                                        User.setNamewelcome(jsonObject.getString("username"));
+                                        Toast.makeText(getApplicationContext(),
+                                                "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+                                        if (checkboxRemember.isChecked()) {
+                                            setUser(LoginActivity.this,
+                                                    txtUserName.getText().toString().trim(),
+                                                    txtPassword.getText().toString().trim(), checkboxRemember.isChecked());
+                                        } else {
+
+                                            setUser(LoginActivity.this, "", "",
+                                                    checkboxRemember.isChecked());
+                                        }
+
+                                        Intent intent = new
+                                                Intent(LoginActivity.this, MainActivity.class);
+                                        intent.putExtra("userObject", response);
+
+                                        startActivity(intent);
+                                        finish();
+
+                                    } else {
+
+                                        Toast.makeText(getApplicationContext(),
+                                                "Sai mật khẩu!", Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onError(String errorMessage) {
+
+                                Toast.makeText(getApplicationContext(), "Người dùng không tồn tại !" + errorMessage, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        });
+        txtRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            }
+        });
     }
 
-    private void setUser(LoginActivity loginActivity, String s, String s1, boolean checked) {
-        SharedPreferences sharedPreferences = loginActivity.getSharedPreferences("my_shared_pref", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("username", s);
-        editor.putString("password", s1);
-        editor.putBoolean("remember_me", checked);
-        editor.apply();
+    public void setUser(Context context, String username, String
+            password, boolean rememberMe) {
+        SharedPreferences prefs =
+                context.getSharedPreferences("myUserPackage", 0);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("username", username);
+        editor.putString("password", password);
+        editor.putBoolean("remember", rememberMe);
+        editor.commit();
     }
 
-    private boolean getRememberMe(LoginActivity loginActivity) {
-        SharedPreferences sharedPreferences = loginActivity.getSharedPreferences("my_shared_pref", Context.MODE_PRIVATE);
-        return sharedPreferences.getBoolean("remember_me", false);
+    public String getUsername(Context context) {
+        SharedPreferences prefs =
+                context.getSharedPreferences("myUserPackage", 0);
+        return prefs.getString("username", "");
     }
 
-    private String getPassword(LoginActivity loginActivity) {
-        SharedPreferences sharedPreferences = loginActivity.getSharedPreferences("my_shared_pref", Context.MODE_PRIVATE);
-        return sharedPreferences.getString("password", "");
+    public String getPassword(Context context) {
+        SharedPreferences prefs =
+                context.getSharedPreferences("myUserPackage", 0);
+        return prefs.getString("password", "");
     }
 
-    private String getUsername(LoginActivity loginActivity) {
-        SharedPreferences sharedPreferences = loginActivity.getSharedPreferences("my_shared_pref", Context.MODE_PRIVATE);
-        return sharedPreferences.getString("username", "");
+    public boolean getRememberMe(Context context) {
+        SharedPreferences prefs =
+                context.getSharedPreferences("myUserPackage", 0);
+        return prefs.getBoolean("remember", false);
     }
 }
