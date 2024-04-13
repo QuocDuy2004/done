@@ -81,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:text=""
+                android:text="duymedia"
                 android:id="@+id/txtUser"
                 android:drawableEnd="@drawable/icons8_done_24"/>
 
@@ -93,37 +93,20 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mật khẩu"
+                android:text="Email khôi phục"
                 android:alpha="0.7"
                 android:textStyle="bold"/>
 
             <EditText
-                android:id="@+id/txtPassWord"
+                android:id="@+id/txtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textWebPassword"
-                android:text=""
-                android:drawableEnd="@drawable/eye"/>
+                android:inputType="text"
+                android:text="duybuntv2@gmail.com"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-                <CheckBox
-                    android:id="@+id/remember"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ghi nhớ"
-                    android:layout_centerVertical="true"
-                    android:alpha="0.7"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Quên mật khẩu"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"/>
             </RelativeLayout>
 
             <View
@@ -133,9 +116,9 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:text="Đăng nhập"
+                android:text="Khôi phục"
                 app:cornerRadius="32dp"
-                android:id="@+id/btnDangnhap"/>
+                android:id="@+id/btnForgot"/>
 
             <View
                 android:layout_width="match_parent"
@@ -154,10 +137,10 @@
                     android:alpha="0.7" />
 
                 <TextView
-                    android:id="@+id/txtTTK"
+                    android:id="@+id/log"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đăng ký"
+                    android:text="Đăng nhập"
                     android:textStyle="bold"
                     android:textColor="@color/my_primary"
                     android:layout_toEndOf="@id/text1"

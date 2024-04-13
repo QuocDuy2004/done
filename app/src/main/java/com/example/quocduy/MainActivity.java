@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
                 adapter.setMyString(userObject);
             }
         }
+
         new TabLayoutMediator(tabLayout, pager2, new
                 TabLayoutMediator.TabConfigurationStrategy() {
                     @Override

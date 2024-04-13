@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.example.quocduy.Cart;
+import com.example.quocduy.ProfileActivity;
 import com.example.quocduy.User;
 import com.google.android.flexbox.FlexboxLayout;
 import com.squareup.picasso.Picasso;
@@ -57,6 +58,7 @@ public class HomeFragment extends Fragment {
     JSONObject userObject;
     private String userName;
     private TextView categoryAll;
+
     public HomeFragment() {
 // Required empty public constructor
     }
@@ -96,6 +98,19 @@ public class HomeFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_home, container,
                 false);
+
+        ImageView imageView = view.findViewById(R.id.picproavfile);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString("key", "Đây là String");
+                setArguments(bundle);
+            }
+        });
+
         // Tìm TextView có id là allproduct
         TextView allProductTextView = view.findViewById(R.id.allproduct);
 // Đặt sự kiện lắng nghe click cho TextView allproduct
@@ -131,9 +146,10 @@ public class HomeFragment extends Fragment {
         progressDialog.setMessage("Đăng tải!");
         progressDialog.show();
         new CountDownTimer(2000, 1000) {
-// Thời gian còn lại được cập nhật sau mỗi 1 giây (1000milliseconds)
+            // Thời gian còn lại được cập nhật sau mỗi 1 giây (1000milliseconds)
             public void onTick(long millisUntilFinished) {
             }
+
             public void onFinish() {
                 progressDialog.dismiss();
             }
@@ -257,6 +273,7 @@ public class HomeFragment extends Fragment {
                     throw new RuntimeException(e);
                 }
             }
+
             @Override
             public void onError(String errorMessage) {
                 System.out.print(errorMessage);
@@ -286,6 +303,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
+
                 intent.putExtra("key", jsonObject.toString());
                 getActivity().startActivity(intent);
                 Bundle bundle = new Bundle();
@@ -294,7 +312,7 @@ public class HomeFragment extends Fragment {
             }
         });
         Picasso.get()
-                .load(apiCaller.url  + "/image/products/" + imageProduct)
+                .load(apiCaller.url + "/image/products/" + imageProduct)
                 .placeholder(R.drawable.load)
                 .error(R.drawable.error_200)
                 .into(imgProduct);
@@ -338,4 +356,5 @@ public class HomeFragment extends Fragment {
         viewFlipper.setFlipInterval(1500);
         viewFlipper.setAutoStart(true);
     }
+
 }

@@ -97,13 +97,29 @@
                 android:alpha="0.7"
                 android:textStyle="bold"/>
 
-            <EditText
-                android:id="@+id/txtPassWord"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textWebPassword"
-                android:text=""
-                android:drawableEnd="@drawable/eye"/>
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/txtPassWord"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textWebPassword"
+                    android:layout_toStartOf="@id/showPassword"
+                    android:layout_marginEnd="8dp"
+                    android:text="" />
+
+                <ImageView
+                    android:id="@+id/showPassword"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/eye" />
+
+            </RelativeLayout>
+
 
             <RelativeLayout
                 android:layout_width="match_parent"

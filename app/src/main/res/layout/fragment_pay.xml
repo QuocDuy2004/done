@@ -17,41 +17,57 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <LinearLayout android:layout_height="50dp"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp">
+                >
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="15dp"
-                    android:src="@drawable/menu" />
-
-                <View
-                    android:layout_width="0dp"
+                <com.google.android.flexbox.FlexboxLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                    app:justifyContent="space_between"
 
-                <TextView
-                    android:textSize="35dp"
-                    android:textStyle="bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Quốc Duy" />
+                    >
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:src="@drawable/trolai"
+                        app:layout_constraintEnd_toStartOf="@+id/txtWelcome"
+                        app:layout_constraintHorizontal_bias="0.17"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
 
-                <ImageView
-                    android:layout_marginEnd="10dp"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/avatar" />
+                    <TextView
+                        android:id="@+id/txtWelcome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center"
+                        android:text="Freedom way, Lekki phase"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/picproavfile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="20dp"
+                        app:srcCompat="@drawable/avatar"
+                        app:layout_constraintHorizontal_bias="0.17"
+                        app:layout_constraintStart_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+
+                </com.google.android.flexbox.FlexboxLayout>
+
 
             </LinearLayout>
 
@@ -87,7 +103,7 @@
 
             </androidx.cardview.widget.CardView>
 
-            <ViewFlipper
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autoStart="true"
@@ -96,17 +112,14 @@
                 android:outAnimation="@android:anim/slide_out_right">
 
                 <ImageView
+                    android:background="@drawable/banner"
+                    android:id="@+id/imageProduct"
                     android:layout_margin="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:scaleType="centerCrop"
-                    android:background="@drawable/banner" />
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/banner1" />
-            </ViewFlipper>
+                    android:scaleType="centerCrop" />
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -171,6 +184,14 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
 
+            <com.example.quocduy.HorizontalNumberPicker
+                android:id="@+id/horizontalNumberPicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtDescription"
+                android:layout_marginStart="16dp"
+                android:layout_margin="8dp"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -178,7 +199,8 @@
                 android:paddingEnd="15dp">
 
                 <TextView
-                    android:text="NIke Sneakers"
+                    android:id="@+id/txtNameProduct"
+                    android:text="Name Product"
                     android:textStyle="bold"
                     android:textSize="20dp"
                     android:textColor="@color/black"
@@ -187,20 +209,21 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp">
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:paddingStart="15dp"-->
+<!--                android:paddingEnd="15dp">-->
 
-                <TextView
-                    android:text="Vision Alta Men’s Shoes Size (All Colours)"
-                    android:textSize="15dp"
-                    android:textColor="@color/black"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+<!--                <TextView-->
+<!--                    android:id="@+id/txtDescription"-->
+<!--                    android:text="Description Product"-->
+<!--                    android:textSize="15dp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"/>-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -223,13 +246,7 @@
                 android:paddingEnd="15dp">
 
                 <TextView
-                    android:id="@+id/del"
-                    android:hint="₹2,999"
-                    android:textSize="15dp"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
+                    android:id="@+id/txtPriceProduct"
                     android:text="₹1,500"
                     android:textSize="15dp"
                     android:layout_marginLeft="10dp"
@@ -273,7 +290,8 @@
                 android:paddingStart="15dp">
 
                 <TextView
-                    android:text="Perhaps the most iconic sneaker of all-time, this original Perhaps the most iconic sneaker of all-time, this original Perhaps the most iconic sneaker of all-time, this original Perhaps the most iconic sneaker of all-time, this original "
+                    android:id="@+id/txtDescription"
+                    android:text="Detail product"
                     android:textSize="15dp"
                     android:textColor="@color/black"
                     android:layout_width="wrap_content"
@@ -377,10 +395,12 @@
                     android:paddingTop="5dp">
 
                     <LinearLayout
+                        android:id="@+id/btnaddcart"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp">
                         <TextView
+                            android:id="@+id/btnAddToCart"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Go to cart"
@@ -413,6 +433,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp">
                         <TextView
+                            android:id="@+id/btnBuy"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Buy Now"
@@ -723,124 +744,17 @@
             <HorizontalScrollView
                 android:id="@+id/horizontalScrollView"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:cardBackgroundColor="#fff"
-                        app:cardCornerRadius="8dp"
-                        android:layout_margin="10dp"
-                        app:cardElevation="6dp">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/background_main"
-                            android:orientation="vertical"
-                            tools:ignore="ExtraText">
-
-
-                            <ImageView
-                                android:id="@+id/imageView15"
-                                android:layout_width="15dp"
-                                android:layout_height="15dp"
-                                android:layout_marginStart="10dp"
-                                android:src="@drawable/menu"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintHorizontal_bias="0.008"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                tools:ignore="MissingConstraints" />
-
-                            <TextView
-                                android:id="@+id/textView37"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="3dp"
-                                android:text="3.8"
-                                android:textSize="12dp"
-                                android:textStyle="bold"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintHorizontal_bias="0.0"
-                                app:layout_constraintStart_toEndOf="@+id/imageView15"
-                                tools:ignore="MissingConstraints"
-                                tools:layout_editor_absoluteY="0dp" />
-
-                            <ImageView
-                                android:id="@+id/imageProduct"
-                                android:layout_width="131dp"
-                                android:layout_height="76dp"
-                                android:src="@drawable/background_product"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintHorizontal_bias="1.0"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintVertical_bias="0.129"
-                                tools:ignore="MissingConstraints" />
-
-                            <TextView
-                                android:id="@+id/txtNameProduct"
-                                android:layout_width="110dp"
-                                android:layout_height="wrap_content"
-                                android:text="Chicken Burger"
-                                android:textSize="15dp"
-                                app:layout_constraintStart_toStartOf="@+id/imageView15"
-                                app:layout_constraintTop_toBottomOf="@+id/imageProduct"
-                                tools:ignore="MissingConstraints" />
-
-                            <TextView
-                                android:id="@+id/txtDescriptionProduct"
-                                android:layout_width="110dp"
-                                android:layout_height="40dp"
-                                android:layout_marginTop="4dp"
-                                android:text="100 gr chicken + tomato + cheese  Lettuce"
-                                android:textColor="#3B3B3B"
-                                android:textSize="10dp"
-                                app:layout_constraintStart_toStartOf="@+id/txtNameProduct"
-                                app:layout_constraintTop_toBottomOf="@+id/txtNameProduct"
-                                tools:ignore="MissingConstraints" />
-
-                            <TextView
-                                android:id="@+id/textView36"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:text="20$"
-                                android:textColor="#D61355"
-                                android:textSize="14dp"
-                                android:textStyle="bold"
-                                app:layout_constraintStart_toStartOf="@+id/txtDescriptionProduct"
-                                app:layout_constraintTop_toBottomOf="@+id/txtDescriptionProduct" />
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="20dp"
-                                android:layout_marginTop="6dp"
-                                android:src="@drawable/menu"
-                                app:layout_constraintBottom_toBottomOf="@+id/textView36"
-                                app:layout_constraintEnd_toEndOf="@+id/txtDescriptionProduct"
-                                app:layout_constraintHorizontal_bias="1.0"
-                                app:layout_constraintStart_toEndOf="@+id/textView36"
-                                app:layout_constraintTop_toBottomOf="@+id/txtDescriptionProduct"
-                                app:layout_constraintVertical_bias="0.0" />
-
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </androidx.cardview.widget.CardView>
+                    android:orientation="horizontal"
+                    android:id="@+id/hcontainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                 </LinearLayout>
+
             </HorizontalScrollView>
 
 

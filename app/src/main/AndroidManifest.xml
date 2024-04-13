@@ -19,23 +19,22 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".tab_layout.EditProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".ForgotActivity"
             android:exported="false" />
         <activity
             android:name=".OrderSuccessActivity"
             android:exported="false" />
-        <activity
-            android:name=".OrderDetail"
-            android:exported="false" />
+
         <activity
             android:name=".OrderActivity"
             android:exported="false" />
         <activity
             android:name=".DetailActivity"
             android:exported="false" />
-        <activity
-            android:name=".CartActivity"
-            android:exported="false" />
+
         <activity
             android:name=".ProfileActivity"
             android:exported="false" /> <!-- Activity chính là LandingPageActivity -->

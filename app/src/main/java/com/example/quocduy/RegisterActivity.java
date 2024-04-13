@@ -59,9 +59,9 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (txtUser.getText().toString().trim().isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Vui lòng nhập tên người dùng", Toast.LENGTH_SHORT).show();
+                    txtUser.setError("Vui lòng nhập tên người dùng");
                 } else if (txtPass.getText().toString().trim().isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Vui lòng nhập mật khẩu", Toast.LENGTH_SHORT).show();
+                    txtPass.setError("Vui lòng nhập mật khẩu");
                 } else {
                     User newUser = new User(
                             txtUser.getText().toString(),
@@ -85,18 +85,13 @@ public class RegisterActivity extends AppCompatActivity {
                             }, 1000);
                         }
 
-
                         @Override
                         public void onError(String errorMessage) {
                             Toast.makeText(getApplicationContext(), "Đăng ký thất bại! Mã lỗi: " + errorMessage, Toast.LENGTH_SHORT).show();
                         }
-
-
                     });
-
                 }
             }
-
         });
         imgUser.setOnClickListener(new View.OnClickListener() {
             @Override

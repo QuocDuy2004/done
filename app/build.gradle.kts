@@ -29,6 +29,8 @@ android {
 }
 
 dependencies {
+//    implementation ("com.airbnb.android:lottie:4.2.0")
+
     implementation ("pl.droidsonroids.gif:android-gif-drawable:1.2.22")
 
     implementation ("com.squareup.picasso:picasso:2.71828")

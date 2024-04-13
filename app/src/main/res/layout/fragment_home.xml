@@ -181,6 +181,7 @@
                         android:layout_height="30dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginLeft="70dp"
+                        android:id="@+id/fragment_container"
                         android:background="@drawable/radius_viewall">
 
                         <TextView
