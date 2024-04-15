@@ -2,7 +2,6 @@ package com.example.quocduy;
 
 import android.content.Context;
 import android.util.Log;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -11,78 +10,74 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
-
 import java.util.HashMap;
 import java.util.Map;
-
-
 public class ApiCaller {
-
     private RequestQueue requestQueue;
     private static ApiCaller instance;
-    private  static Context ctx;
-
-    public  static String  url = "http://192.168.1.4:8080/api";
-    private  ApiCaller(Context context){
+    private static Context ctx;
+    public static String url = "http://10.17.8.109:8080/api";
+    private ApiCaller(Context context) {
         ctx = context.getApplicationContext();
+
         requestQueue = getRequestQueue();
     }
-
-    public static  synchronized  ApiCaller getInstance(Context context){
-        if( instance ==  null){
+    public static synchronized ApiCaller getInstance(Context context) {
+        if (instance == null) {
             instance = new ApiCaller(context);
-
         }
-        return  instance;
+        return instance;
     }
-    public  RequestQueue getRequestQueue(){
-        if (requestQueue == null){
+    private RequestQueue getRequestQueue() {
+        if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(ctx);
-
         }
         return requestQueue;
     }
-    public <T> void  addToRequestQueue(Request<T> req){
+    public <T> void addToRequestQueue(Request<T> req) {
         getRequestQueue().add(req);
     }
+    public void makeStringRequest(String url, final
+    ApiResponseListener<String> listener) {
+        StringRequest stringRequest = new
+                StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
 
-    public void makeStringRequest(String url, final ApiResponseListener<String> listener){
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,  new Response.Listener<String>() {
+                    public void onResponse(String response) {
+                        try {
+                            String utf8Response = new
+                                    String(response.getBytes("ISO-8859-1"), "UTF-8");
+                            listener.onSuccess(utf8Response);
+                        } catch (Exception e) {
+                            listener.onError(e.getMessage());
+                        }
+                    }
+                }, new Response.ErrorListener() {
             @Override
-            public void onResponse(String response) {
-                try {
-                    String utf8Response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
-                    listener.onSuccess(utf8Response);
-                }catch (Exception e){
-                    listener.onError(e.getMessage());
-                }
-            }
 
-        }, new Response.ErrorListener() {
-            @Override
             public void onErrorResponse(VolleyError error) {
-
                 listener.onError(error.getMessage());
             }
         });
         addToRequestQueue(stringRequest);
     }
+    public void makeJsonArrayRequest(String url, final
+    ApiResponseListener<JSONArray> listener) {
+        JsonArrayRequest jsonArrayRequest = new
+                JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
 
-    public void makeJsonArrayRequest(String url, final ApiResponseListener<String> listener){
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                // Chuyển đổi JSONArray thành chuỗi và gửi cho lời gọi onSuccess
+                    public void onResponse(JSONArray response) {
 
-                listener.onSuccess(String.valueOf(response));
-//                listener.onSuccess(response);
-            }
-        }, new Response.ErrorListener() {
+                        listener.onSuccess(response);
+                    }
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 listener.onError(error.getMessage());
@@ -90,26 +85,20 @@ public class ApiCaller {
         });
         addToRequestQueue(jsonArrayRequest);
     }
-
-
-
-    public interface  ApiResponseListener<T>{
+    public interface ApiResponseListener<T> {
         void onSuccess(T response);
-
         void onError(String errorMessage);
-
     }
-    public  JSONArray stringToJsonArray(String jsonString){
+    public JSONArray stringToJsonArray(String jsonString) {
         JSONArray jsonArray = null;
-        try{
-            JSONObject  jsonObject = new  JSONObject(jsonString);
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
             jsonArray = jsonObject.getJSONArray("content");
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return jsonArray;
     }
-
     public  void  addUser(User  user, final  ApiResponseListener<User>listener){
         String addUserUrl = url + "/users/adduser";
 
@@ -148,22 +137,18 @@ public class ApiCaller {
         };
         addToRequestQueue(request);
     }
-
-    //UPDATE USER
     public void updateUser(User user, final ApiResponseListener<User>
             listener) {
-        String addUserUrl = url + "/users/"+User.getId(); // Đường dẫn đến API thêm người dùng
+        String addUserUrl = url + "/users/"+User.getId();
         StringRequest request = new StringRequest(Request.Method.PUT,
                 addUserUrl,
                 new Response.Listener<String>() {
                     @Override
-
                     public void onResponse(String response) {
-
                         try {
                             JSONObject jsonResponse = new
                                     JSONObject(response);
-// Xử lý phản hồi từ máy chủ (lưu thông tin người dùng)
+
                             User savedUser = user;
                             listener.onSuccess(savedUser);
                         } catch (JSONException e) {
@@ -208,9 +193,7 @@ public class ApiCaller {
                 JsonObjectRequest(Request.Method.POST, cartUrl, cartJson,
                 new Response.Listener<JSONObject>() {
                     @Override
-
                     public void onResponse(JSONObject response) {
-
                         listener.onSuccess(response);
                     }
                 }, new Response.ErrorListener() {
@@ -223,17 +206,14 @@ public class ApiCaller {
     }
     public void deleteCart(int cartId, final ApiResponseListener<String>
             listener) {
-        String deleteCartUrl = url + "/carts/" + cartId; // API endpoint for deleting a cart
+        String deleteCartUrl = url + "/carts/" + cartId;
         StringRequest request = new StringRequest(Request.Method.DELETE,
                 deleteCartUrl,
                 new Response.Listener<String>() {
                     @Override
-
                     public void onResponse(String response) {
-
-// Assuming successful deletion returns a message
+                        // Assuming successful deletion returns a message
                         listener.onSuccess("Cart successfully deleted!");
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -246,7 +226,7 @@ public class ApiCaller {
     }
     public void addCartDetail(final int cartId, final int productId,
                               final int quantity, final ApiResponseListener<JSONObject> listener) {
-        String cartDetailUrl = url + "/cartDetails"; // Đường dẫn API để thêm chi tiết giỏ hàng
+        String cartDetailUrl = url + "/cartDetails";
         JSONObject cartDetailJson = new JSONObject();
         try {
             JSONObject productJson = new JSONObject();
@@ -265,9 +245,7 @@ public class ApiCaller {
                 JsonObjectRequest(Request.Method.POST, cartDetailUrl, cartDetailJson,
                 new Response.Listener<JSONObject>() {
                     @Override
-
                     public void onResponse(JSONObject response) {
-
                         listener.onSuccess(response);
                     }
                 }, new Response.ErrorListener() {
@@ -280,18 +258,15 @@ public class ApiCaller {
     }
     public void deleteItemCart(int cartItemId, final
     ApiResponseListener<String> listener) {
-        String deleteCartUrl = url + "/cartDetails/" + cartItemId; // API endpoint for deleting a cart
+        String deleteCartUrl = url + "/cartDetails/" + cartItemId;
         Log.d("ddddlete",deleteCartUrl);
         StringRequest request = new StringRequest(Request.Method.DELETE,
                 deleteCartUrl,
                 new Response.Listener<String>() {
                     @Override
-
                     public void onResponse(String response) {
-
-// Assuming successful deletion returns a message
+                        // Assuming successful deletion returns a message
                         listener.onSuccess("Cart successfully deleted!");
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -320,9 +295,7 @@ public class ApiCaller {
                 JsonObjectRequest(Request.Method.POST, cartUrl, ordertJson,
                 new Response.Listener<JSONObject>() {
                     @Override
-
                     public void onResponse(JSONObject response) {
-
                         listener.onSuccess(response);
                     }
                 }, new Response.ErrorListener() {
@@ -335,7 +308,7 @@ public class ApiCaller {
     }
     public void addOrderDetail(final OrderDetail orderDetail, final
     ApiResponseListener<JSONObject> listener) {
-        String cartUrl = url + "/orderDetails"; // Đường dẫn API để tạo cart
+        String cartUrl = url + "/orderDetails";
         JSONObject orderDetailtJson = new JSONObject();
         try {
             JSONObject orderJson = new JSONObject();
@@ -354,9 +327,7 @@ public class ApiCaller {
                 JsonObjectRequest(Request.Method.POST, cartUrl, orderDetailtJson,
                 new Response.Listener<JSONObject>() {
                     @Override
-
                     public void onResponse(JSONObject response) {
-
                         listener.onSuccess(response);
                     }
                 }, new Response.ErrorListener() {

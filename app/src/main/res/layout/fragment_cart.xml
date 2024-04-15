@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingHorizontal="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".tab_layout.HomeFragment">
+    tools:context=".tab_layout.CartFragment">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -26,9 +26,9 @@
                     android:layout_width="match_parent"
                     android:gravity="center_vertical"
                     android:layout_marginTop="20dp"
-                    android:background="@drawable/background_home"
                     android:layout_height="50dp">
                     <TextView
+
                         android:id="@+id/txtWelcome"
                         android:text="Đơn hàng"
                         android:layout_marginLeft="20dp"
@@ -54,6 +54,7 @@
                 android:orientation="vertical"
                 android:gravity="center_vertical"
                 android:layout_width="match_parent"
+
                 android:layout_height="match_parent">
                 <TextView
                     android:text="Tổng cộng:"
@@ -64,20 +65,20 @@
 
                 <TextView
                     android:id="@+id/priceTotal"
-                    android:text=" 180.000"
+                    android:text=" 180 k"
                     android:textSize="18sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
             </LinearLayout>
+
             <Button
                 android:id="@+id/btnOrder"
-                android:layout_weight="1"
-                android:textColor="@color/white"
-                android:text="Thanh toán"
-                android:background="@drawable/background_button"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/background_button"
+                android:text="Thanh toán" />
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

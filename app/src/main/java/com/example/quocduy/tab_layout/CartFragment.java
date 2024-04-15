@@ -1,12 +1,11 @@
 package com.example.quocduy.tab_layout;
 
+
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,21 +15,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-import com.example.quocduy.DetailActivity;
-import com.example.quocduy.OrderActivity;
-import com.example.quocduy.R;
+import androidx.fragment.app.Fragment;
+
 import com.example.quocduy.ApiCaller;
 import com.example.quocduy.Cart;
-import com.example.quocduy.DataHolder;
+import com.example.quocduy.OrderActivity;
+import com.example.quocduy.R;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link CartFragment#newInstance} factory method to
+ * Use the {@link HistorryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class CartFragment extends Fragment {
@@ -47,11 +45,9 @@ public class CartFragment extends Fragment {
     View viewContainer;
     JSONArray jsonArrayCart;
     int priceTotalNumber = 0;
-
     public CartFragment() {
 // Required empty public constructor
     }
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -60,17 +56,15 @@ public class CartFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment HisFragment.
      */
-
-    // TODO: Rename and change types and number of parameters
-    public static HistoryFragment newInstance(String param1, String param2) {
-        HistoryFragment fragment = new HistoryFragment();
+// TODO: Rename and change types and number of parameters
+    public static CartFragment newInstance(String param1, String param2) {
+        CartFragment fragment = new CartFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,12 +73,11 @@ public class CartFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
     @Override
     public void onResume() {
         super.onResume();
         apiCaller.makeStringRequest(apiCaller.url +
-                "/cartDetails/cart/" + Cart.getId(), new
+                "/cartDetails/cart/"+Cart.getId(), new
                 ApiCaller.ApiResponseListener<String>() {
                     @Override
                     public void onSuccess(String response) {
@@ -95,7 +88,7 @@ public class CartFragment extends Fragment {
                         }
                         cartContainerGlobal.removeAllViews();
                         priceTotalNumber = 0;
-                        for (int i = 0; i < jsonArrayCart.length(); i++) {
+                        for (int i = 0; i < jsonArrayCart.length(); i++){
                             try {
                                 int idItemCart =
                                         jsonArrayCart.getJSONObject(i).getInt("id");
@@ -117,19 +110,17 @@ public class CartFragment extends Fragment {
                             }
                         }
                     }
-
                     @Override
                     public void onError(String errorMessage) {
                     }
                 });
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup
             container,
                              Bundle savedInstanceState) {
 // Inflate the layout for this fragment
-        viewContainer = inflater.inflate(R.layout.fragment_history,
+        viewContainer = inflater.inflate(R.layout.fragment_cart,
                 container, false);
         inflaterGlobal = inflater;
         cartContainerGlobal =
@@ -148,9 +139,9 @@ public class CartFragment extends Fragment {
         });
         return viewContainer;
     }
-
+    @SuppressLint("SetTextI18n")
     public void addItemCart(LayoutInflater inflater, LinearLayout
-            cartContainer, String data, int index, int idItemCart) {
+            cartContainer, String data, int index, int idItemCart){
         int priceItem = 0;
         View item = inflater.inflate(R.layout.item_cart, cartContainer,
                 false);
@@ -165,15 +156,15 @@ public class CartFragment extends Fragment {
         try {
             JSONObject itemProductData = new JSONObject(data);
             textName.setText(itemProductData.getString("title"));
-            txtToal.setText(itemProductData.getString("priceTotal") + " k");
-                    txtQuantity.setText("Số lượng: "+itemProductData.getString("quantity"));
-                            priceItem = itemProductData.getInt("priceTotal");
+            txtToal.setText(itemProductData.getString("priceTotal")+" k");
+            txtQuantity.setText("Số lượng: "+itemProductData.getString("quantity"));
+            priceItem = itemProductData.getInt("priceTotal");
             priceTotalNumber += priceItem;
-            priceTotal.setText(String.valueOf(priceTotalNumber) + " k");
+            priceTotal.setText(String.valueOf(priceTotalNumber)+" k");
             Picasso.get()
-                    .load(apiCaller.url + "/image/products/" + itemProductData.getString("photo")
+                    .load(apiCaller.url+"/image/products/"+itemProductData.getString("photo")
                     )
-                    .placeholder(R.drawable.downloading_200)
+                    .placeholder(R.drawable.load)
                     .error(R.drawable.error_200)
                     .into(imgProduct);
         } catch (JSONException e) {
@@ -184,43 +175,39 @@ public class CartFragment extends Fragment {
         deleteItemCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showConfirmationDialog(item, cartContainer, priceTotal,
+                showConfirmationDialog(item,cartContainer,priceTotal,
                         index, finalPriceItem, finalIdItemCart);
             }
         });
         cartContainer.addView(item);
     }
-
-    public void removeItem(View item, LinearLayout cartContainer, TextView
-            priceTotal, int index, int priceItem, int idItemCart) {
+    public void removeItem(View item, LinearLayout cartContainer,TextView
+            priceTotal, int index, int priceItem, int idItemCart){
         Log.d("MyFragment", String.valueOf(index));
-        apiCaller.deleteItemCart(idItemCart, new
-                ApiCaller.ApiResponseListener<String>() {
-                    @Override
-                    public void onSuccess(String response) {
-                        cartContainer.removeView(item);
-                        priceTotalNumber -= priceItem;
-                        priceTotal.setText(String.valueOf(priceTotalNumber) + " k");
-                    }
-
-                    @Override
-                    public void onError(String errorMessage) {
-                    }
-                });
+        apiCaller.deleteItemCart(idItemCart, new ApiCaller.ApiResponseListener<String>() {
+            @Override
+            public void onSuccess(String response) {
+                cartContainer.removeView(item);
+                priceTotalNumber -= priceItem;
+                priceTotal.setText(String.valueOf(priceTotalNumber)+" k");
+            }
+            @Override
+            public void onError(String errorMessage) {
+            }
+        });
     }
-
     private void showConfirmationDialog(View item, LinearLayout
-            cartContainer, TextView priceTotal, int index, int priceItem, int
+            cartContainer,TextView priceTotal ,int index, int priceItem, int
                                                 idItemCart) {
         AlertDialog.Builder builder = new
                 AlertDialog.Builder(getActivity());
         builder.setTitle("Xác nhận xóa");
-        builder.setMessage("Bạn có chắc chắn muốn xóa sản phẩm khỏi đơn hàng ? ");
+        builder.setMessage("Bạn có chắc chắn muốn xóa sản phẩm khỏi đơn hàng?");
         builder.setPositiveButton("OK", new
                 DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        removeItem(item, cartContainer, priceTotal, index, priceItem, idItemCart);
+                        removeItem(item,cartContainer,priceTotal,index,priceItem,idItemCart);
                     }
                 });
         builder.setNegativeButton("Hủy", new

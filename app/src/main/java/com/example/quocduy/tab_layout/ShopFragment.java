@@ -158,13 +158,25 @@ public class ShopFragment extends Fragment {
     private void addItemProduct(View view, LayoutInflater inflater, FlexboxLayout flexboxLayout, JSONObject jsonObject) {
         View item = inflater.inflate(R.layout.item_product_shop, flexboxLayout, false);
         TextView textName = item.findViewById(R.id.txtNameProduct);
+        TextView textDescriptionProduct = item.findViewById(R.id.txtDescriptionProduct); // TextView mô tả sản phẩm
         TextView textPrice = item.findViewById(R.id.txtPriceProduct);
         ImageView imgProduct = item.findViewById(R.id.imageProduct);
         LinearLayout touchLinear = item.findViewById(R.id.itemContainer);
         String imageProduct = "";
         try {
             textName.setText(jsonObject.getString("title").toString());
-            textPrice.setText(jsonObject.getString("price").toString());
+
+            // Lấy mô tả sản phẩm từ dữ liệu JSON
+            String description = jsonObject.getString("description");
+            textDescriptionProduct.setText(description);
+
+            // Lấy giá sản phẩm từ dữ liệu JSON
+            double price = jsonObject.getDouble("price");
+            // Format giá theo kiểu số thập phân hoặc số nguyên và thêm đơn vị VNĐ
+            String formattedPrice = String.format("%,.0f VNĐ", price); // Định dạng kiểu số nguyên
+            // String formattedPrice = String.format("%,.2f VNĐ", price); // Định dạng kiểu số thập phân với 2 chữ số sau dấu phẩy
+            textPrice.setText(formattedPrice);
+
             imageProduct = jsonObject.getString("photo").toString();
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -186,8 +198,9 @@ public class ShopFragment extends Fragment {
                 .error(R.drawable.error_200)
                 .into(imgProduct);
         flexboxLayout.addView(item);
-
     }
+
+
 
     private void addBanner(View view, JSONArray jsonArray) {
         ViewFlipper viewFlipper = view.findViewById(R.id.bannerView);

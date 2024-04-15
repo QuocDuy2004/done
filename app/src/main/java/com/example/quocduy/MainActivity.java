@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 // tab.setText("History");
                                 break;
                             case 2:
-                                tab.setIcon(R.drawable.chat);
+                                tab.setIcon(R.drawable.cart);
 // tab.setText("Account");
                                 break;
                         }

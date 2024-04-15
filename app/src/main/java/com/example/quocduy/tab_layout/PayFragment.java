@@ -112,7 +112,7 @@ public class PayFragment extends Fragment {
         });
 
         // Tìm TextView có id là allproduct
-        TextView allProductTextView = view.findViewById(R.id.allproduct);
+        TextView allProductTextView = view.findViewById(R.id.categoryAll);
 // Đặt sự kiện lắng nghe click cho TextView allproduct
         allProductTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,7 +122,7 @@ public class PayFragment extends Fragment {
                 // Khởi tạo transaction để thực hiện thay thế fragment hiện tại bằng ShopFragment
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 // Thực hiện thay thế fragment hiện tại bằng ShopFragment
-                transaction.replace(R.id.allproduct, shopFragment);
+                transaction.replace(R.id.categoryAll, shopFragment);
                 // Thêm fragment hiện tại vào ngăn xếp trở lại, để có thể quay lại fragment trước đó khi ấn nút back
                 transaction.addToBackStack(null);
                 // Commit transaction

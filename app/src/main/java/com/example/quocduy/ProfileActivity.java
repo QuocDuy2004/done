@@ -33,5 +33,6 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(intent); // Chuyển tới trang EditProfileActivity
             }
         });
+
     }
 }

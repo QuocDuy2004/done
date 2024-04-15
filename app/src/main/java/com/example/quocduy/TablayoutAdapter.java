@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 
+import com.example.quocduy.tab_layout.CartFragment;
 import com.example.quocduy.tab_layout.ChatFragment;
 import com.example.quocduy.tab_layout.HomeFragment;
 import com.example.quocduy.tab_layout.ShopFragment;
@@ -31,7 +32,7 @@ public class TablayoutAdapter extends FragmentStateAdapter{
                 fragment2.setArguments(createBundle());
                 return fragment2;
             case 2:
-                Fragment fragment3 = new ChatFragment();
+                Fragment fragment3 = new CartFragment();
                 fragment3.setArguments(createBundle());
                 return fragment3;
             default:
