@@ -29,6 +29,11 @@ android {
 }
 
 dependencies {
+    implementation ("pl.droidsonroids.gif:android-gif-drawable:1.2.22")
+
+
+    implementation ("com.google.android.gms:play-services-auth:20.1.0")
+
 
     implementation ("com.airbnb.android:lottie:4.1.0")
 

@@ -138,6 +138,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp">
                 <EditText
+                    android:id="@+id/editText6UK"
                     android:text="6 UK"
                     android:gravity="center"
                     android:textStyle="bold"
@@ -146,6 +147,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
+                    android:id="@+id/editText7UK"
                     android:text="7 UK"
                     android:gravity="center"
                     android:textStyle="bold"
@@ -155,6 +157,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
+                    android:id="@+id/editText8UK"
                     android:text="8 UK"
                     android:gravity="center"
                     android:layout_marginLeft="10dp"
@@ -164,6 +167,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
+                    android:id="@+id/editText9UK"
                     android:text="9 UK"
                     android:gravity="center"
                     android:layout_marginLeft="10dp"
@@ -173,6 +177,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <EditText
+                    android:id="@+id/editText10UK"
                     android:text="10 UK"
                     android:gravity="center"
                     android:layout_marginLeft="10dp"
@@ -428,6 +433,7 @@
                     android:paddingTop="5dp">
 
                     <LinearLayout
+                        android:id="@+id/btnbuy"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp">
@@ -666,26 +672,21 @@
 
                 </LinearLayout>
             </LinearLayout>
+            <HorizontalScrollView
+                android:id="@+id/horizontalScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-<!--            <HorizontalScrollView-->
-<!--                android:id="@+id/horizontalScrollView"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="vertical">-->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:id="@+id/itemContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-<!--                <LinearLayout-->
-<!--                    android:orientation="horizontal"-->
-<!--                    android:id="@+id/hcontainer"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent">-->
+                </LinearLayout>
 
-<!--                </LinearLayout>-->
-
-<!--            </HorizontalScrollView>-->
-
-
-
-            <!--          Kết thúc-->
+            </HorizontalScrollView>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

@@ -455,6 +455,7 @@
         android:layout_height="wrap_content">
         <Button
             android:id="@+id/logout"
+
             android:textSize="20dp"
             android:hint="Đăng xuất"
             android:background="#CBE4FB"

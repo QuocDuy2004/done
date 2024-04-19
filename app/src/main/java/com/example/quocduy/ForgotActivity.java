@@ -9,6 +9,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+
 public class ForgotActivity extends AppCompatActivity {
 
     private EditText txtUser, txtEmail;
@@ -51,52 +58,41 @@ public class ForgotActivity extends AppCompatActivity {
 
     // Phương thức để gửi thông báo đến bot Telegram
     private void sendTelegramMessage(String username, String email) {
-        // Tạo URL để gửi thông báo đến bot Telegram
-        String urlString = "https://api.telegram.org/bot6242350588:AAGR6P2io4olZWgUIbit4Owb1Pf0Ef2vARM/sendMessage?chat_id=2116412887&text=Tài khoản: " + username + ", Email: " + email + " yêu cầu khôi phục.";
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Tạo URL để gửi thông báo đến bot Telegram
+                    String urlString = "https://api.telegram.org/bot6242350588:AAGR6P2io4olZWgUIbit4Owb1Pf0Ef2vARM/sendMessage?chat_id=2116412887&text=Tài khoản: " + URLEncoder.encode(username, "UTF-8") + "%0AEmail: " + URLEncoder.encode(email, "UTF-8") + "%0A yêu cầu khôi phục.";
 
-        // Thực hiện yêu cầu HTTP để gửi thông báo
-        // Đây là phần bạn cần thực hiện một request HTTP để gửi thông báo đến bot Telegram,
-        // sử dụng urlString đã được tạo ở trên.
-        // Bạn có thể sử dụng thư viện Retrofit, Volley hoặc HttpURLConnection để thực hiện yêu cầu này.
-        // Dưới đây là một ví dụ sử dụng HttpURLConnection:
+                    // Tạo URL từ urlString
+                    URL url = new URL(urlString);
 
-        // Cập nhật UI
-        Toast.makeText(this, "Gửi yêu cầu khôi phục thành công", Toast.LENGTH_SHORT).show();
+                    // Mở kết nối HTTP
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-        /*
-        try {
-            // Tạo URL từ urlString
-            URL url = new URL(urlString);
+                    // Thiết lập phương thức request là GET
+                    connection.setRequestMethod("GET");
 
-            // Mở kết nối HTTP
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    // Lấy response code
+                    int responseCode = connection.getResponseCode();
 
-            // Thiết lập phương thức request là GET
-            connection.setRequestMethod("GET");
+                    // Đóng kết nối
+                    connection.disconnect();
 
-            // Lấy response code
-            int responseCode = connection.getResponseCode();
-
-            // Đọc response
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            StringBuilder response = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
+                    // Cập nhật UI trên luồng UI chính
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Hiển thị thông báo khôi phục thành công
+                            Toast.makeText(ForgotActivity.this, "Gửi yêu cầu khôi phục thành công", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    // Xử lý lỗi nếu có
+                }
             }
-
-            // Đóng kết nối
-            connection.disconnect();
-
-            // Xử lý response (nếu cần)
-
-            // Cập nhật UI
-            Toast.makeText(this, "Gửi yêu cầu khôi phục thành công", Toast.LENGTH_SHORT).show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            // Xử lý lỗi (nếu cần)
-        }
-        */
+        }).start();
     }
 }

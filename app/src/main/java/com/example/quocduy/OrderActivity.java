@@ -1,23 +1,16 @@
 package com.example.quocduy;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-
-import com.airbnb.lottie.LottieAnimationView;
-import com.example.quocduy.ApiCaller;
-import com.example.quocduy.Cart;
-import com.example.quocduy.Order;
-import com.example.quocduy.OrderDetail;
-import com.example.quocduy.User;
+import android.os.Handler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import pl.droidsonroids.gif.GifImageView;
 
 public class OrderActivity extends AppCompatActivity {
     String receivedData;
@@ -27,93 +20,81 @@ public class OrderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
-        LottieAnimationView animationView = findViewById(R.id.animation);
+
+        // Ánh xạ GifImageView từ layout
+        GifImageView gifImageView = findViewById(R.id.ordess);
+
+        // Nhận dữ liệu từ Intent
         Intent intent = getIntent();
-// Nhận dữ liệu từ Intent
         if (intent != null) {
             receivedData = intent.getStringExtra("ListItemCart");
         }
-        animationView.addAnimatorListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(@NonNull Animator animation) {
-            }
 
-            @Override
-            public void onAnimationEnd(@NonNull Animator animation) {
-            }
-
-            @Override
-            public void onAnimationCancel(@NonNull Animator animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(@NonNull Animator animation) {
-                if (addSuccess) {
-                    startActivity(new Intent(OrderActivity.this, OrderSuccessActivity.class));
-                    finish();
-                }
-            }
-        });
+        // Thực hiện thêm đơn hàng
         addOrder();
     }
 
+    // Phương thức thêm đơn hàng
     void addOrder() {
         ApiCaller apiCaller = ApiCaller.getInstance(getBaseContext());
         Order order = new Order(User.getId());
-        apiCaller.addOrder(order, new
-                ApiCaller.ApiResponseListener<JSONObject>() {
-                    @Override
-                    public void onSuccess(JSONObject response) {
-                        try {
-                            Order.setId(response.getInt("id"));
-                            JSONArray jsonArray = new JSONArray(receivedData);
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                int quantity =
-                                        jsonArray.getJSONObject(i).getInt("quantity");
-                                JSONObject jsonProductObject = new
-                                        JSONObject(jsonArray.getJSONObject(i).getString("product"));
-                                int productid = jsonProductObject.getInt("id");
-                                OrderDetail orderDetail = new
-                                        OrderDetail(quantity, Order.getId(), productid);
-                                apiCaller.addOrderDetail(orderDetail, new ApiCaller.ApiResponseListener<JSONObject>() {
-                                    @Override
+        apiCaller.addOrder(order, new ApiCaller.ApiResponseListener<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    Order.setId(response.getInt("id"));
+                    JSONArray jsonArray = new JSONArray(receivedData);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        int quantity = jsonArray.getJSONObject(i).getInt("quantity");
+                        JSONObject jsonProductObject = jsonArray.getJSONObject(i).getJSONObject("product");
+                        int productId = jsonProductObject.getInt("id");
+                        OrderDetail orderDetail = new OrderDetail(quantity, Order.getId(), productId);
 
-                                    public void onSuccess(JSONObject response) {
-                                    }
-
-                                    @Override
-
-                                    public void onError(String errorMessage) {
-
-                                    }
-                                });
+                        // Thêm chi tiết đơn hàng
+                        apiCaller.addOrderDetail(orderDetail, new ApiCaller.ApiResponseListener<JSONObject>() {
+                            @Override
+                            public void onSuccess(JSONObject response) {
+                                // Xử lý khi thêm chi tiết đơn hàng thành công
                             }
 
-                            apiCaller.deleteCart(Cart.getId(), new
+                            @Override
+                            public void onError(String errorMessage) {
+                                // Xử lý khi có lỗi khi thêm chi tiết đơn hàng
+                            }
+                        });
+                    }
 
-                                    ApiCaller.ApiResponseListener<String>() {
-                                        @Override
-
-                                        public void onSuccess(String response) {
-
-                                            Cart.setId(0);
-                                            addSuccess = true;
-                                        }
-
-                                        @Override
-
-                                        public void onError(String errorMessage) {
-
-                                        }
-                                    });
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
+                    // Xóa giỏ hàng sau khi thêm đơn hàng
+                    apiCaller.deleteCart(Cart.getId(), new ApiCaller.ApiResponseListener<String>() {
+                        @Override
+                        public void onSuccess(String response) {
+                            Cart.setId(0);
+                            // Đánh dấu thành công khi xóa giỏ hàng
+                            addSuccess = true;
+                            // Sử dụng Handler để chờ 1 giây trước khi chuyển đến OrderSuccessActivity
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(new Intent(OrderActivity.this, OrderSuccessActivity.class));
+                                    finish();
+                                }
+                            }, 1000); // Chờ 1 giây trước khi chuyển đến OrderSuccessActivity
                         }
-                    }
 
-                    @Override
-                    public void onError(String errorMessage) {
-                    }
-                });
+                        @Override
+                        public void onError(String errorMessage) {
+                            // Xử lý khi có lỗi khi xóa giỏ hàng
+                        }
+                    });
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                // Xử lý khi có lỗi khi thêm đơn hàng
+            }
+        });
     }
 }

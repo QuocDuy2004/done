@@ -46,7 +46,7 @@ public class DetailActivity extends AppCompatActivity {
                 receivedData = intent.getStringExtra("ItemProduct");
                 itemProductData = new JSONObject(receivedData);
                 productPrice = itemProductData.getInt("price");
-                txtPriceProduct.setText(itemProductData.getString("price")+" k");
+                txtPriceProduct.setText(itemProductData.getString("price")+" VNĐ");
                 txtNameProduct.setText(itemProductData.getString("title"));
                 txtProductDescription.setText(itemProductData.getString("description"));
                 itemProductData.put("quantity",
@@ -78,7 +78,7 @@ public class DetailActivity extends AppCompatActivity {
                                                                } catch (JSONException e) {
                                                                    throw new RuntimeException(e);
                                                                }
-                                                               txtPriceProduct.setText(String.valueOf(priceTotal)+ " k");
+                                                               txtPriceProduct.setText(String.valueOf(priceTotal)+ " VNĐ");
                                                            }
                                                        });
         btnGoBack.setOnClickListener(new View.OnClickListener() {

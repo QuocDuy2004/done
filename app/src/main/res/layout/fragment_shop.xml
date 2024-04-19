@@ -119,6 +119,13 @@
 
                 </ViewFlipper>
             </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:text="Tất cả sản phẩm"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout3"

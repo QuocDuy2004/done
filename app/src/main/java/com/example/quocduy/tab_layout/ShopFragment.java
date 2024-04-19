@@ -79,7 +79,7 @@ public class ShopFragment extends Fragment {
         }
 
         ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Đăng tải!");
+        progressDialog.setMessage("Đang tải dữ liệu vui lòng đợi !");
         progressDialog.show();
         new CountDownTimer(2000, 1000) {
             public void onTick(long millisUntilFinished) {
@@ -185,11 +185,8 @@ public class ShopFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra("key", jsonObject.toString());
-                getActivity().startActivity(intent);
-                Bundle bundle = new Bundle();
-                bundle.putString("key", "Đây là String");
-                setArguments(bundle);
+                intent.putExtra("ItemProduct", jsonObject.toString());
+                startActivity(intent);
             }
         });
         Picasso.get()

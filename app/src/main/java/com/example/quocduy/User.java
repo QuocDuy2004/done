@@ -31,6 +31,9 @@ public class User {
     public static int getId() {
         return id;
     }
+    public static int getUserId() {
+        return id;
+    }
 
     public static void setId(int id) {
         User.id = id;

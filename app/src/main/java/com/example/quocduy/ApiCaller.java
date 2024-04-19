@@ -20,7 +20,7 @@ public class ApiCaller {
     private RequestQueue requestQueue;
     private static ApiCaller instance;
     private static Context ctx;
-    public static String url = "http://10.17.8.109:8080/api";
+    public static String url = "http://192.168.1.5:8080/api";
     private ApiCaller(Context context) {
         ctx = context.getApplicationContext();
 
@@ -85,6 +85,85 @@ public class ApiCaller {
         });
         addToRequestQueue(jsonArrayRequest);
     }
+
+    public void changePassword(int userId, String oldPassword, String newPassword, final ApiResponseListener<String> listener) {
+        String changePasswordUrl = url + "/users/" + userId + "/changepassword";
+
+        JSONObject requestData = new JSONObject();
+        try {
+            requestData.put("oldPassword", oldPassword);
+            requestData.put("newPassword", newPassword);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            listener.onError("Error creating JSON data for change password request.");
+            return;
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, changePasswordUrl, requestData,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            String message = response.getString("message");
+                            listener.onSuccess(message);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            listener.onError("Error parsing server response for change password request.");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        listener.onError("Error sending change password request: " + error.getMessage());
+                    }
+                });
+
+        addToRequestQueue(jsonObjectRequest);
+    }
+
+    public void authenticateWithGoogle(String idToken, ApiResponseListener<String> apiResponseListener) {
+        // Đường dẫn API của máy chủ để xác thực ID token từ Google
+        String googleAuthUrl = url + "/auth/google";
+
+        // Tạo một đối tượng JSON để chứa ID token
+        JSONObject requestData = new JSONObject();
+        try {
+            requestData.put("idToken", idToken);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            apiResponseListener.onError("Error creating JSON data for Google authentication request.");
+            return;
+        }
+
+        // Tạo một yêu cầu JSON để gửi đến máy chủ
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, googleAuthUrl, requestData,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            // Kiểm tra phản hồi từ máy chủ và trả về kết quả tương ứng
+                            String message = response.getString("message");
+                            apiResponseListener.onSuccess(message);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            apiResponseListener.onError("Error parsing server response for Google authentication request.");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        apiResponseListener.onError("Error sending Google authentication request: " + error.getMessage());
+                    }
+                });
+
+        // Thêm yêu cầu vào hàng đợi để thực hiện
+        addToRequestQueue(jsonObjectRequest);
+    }
+
+
+
     public interface ApiResponseListener<T> {
         void onSuccess(T response);
         void onError(String errorMessage);

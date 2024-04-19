@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import com.example.quocduy.ApiCaller;
 import com.example.quocduy.Cart;
 import com.example.quocduy.DetailActivity;
+import com.example.quocduy.ProfileActivity;
 import com.example.quocduy.R;
 import com.example.quocduy.User;
 import com.squareup.picasso.Picasso;
@@ -45,9 +46,11 @@ public class HomeFragment extends Fragment {
     LinearLayout linearLayout;
     JSONArray jsonArrayDataProduct;
     int idItemCategory = 0;
+
     public HomeFragment() {
 // Required empty public constructor
     }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -57,8 +60,7 @@ public class HomeFragment extends Fragment {
      * @return A new instance of fragment HomeFragment.
      */
 // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2)
-    {
+    public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -66,6 +68,7 @@ public class HomeFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +77,7 @@ public class HomeFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup
             container,
@@ -81,13 +85,27 @@ public class HomeFragment extends Fragment {
 // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container,
                 false);
+
+        ImageView profileImageView = view.findViewById(R.id.picproavfile);
+
+        profileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Tạo Intent để chuyển hướng tới ProfileActivity
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                // Bắt đầu activity mới
+                startActivity(intent);
+            }
+        });
+
         ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Đăng tải!");
+        progressDialog.setMessage("Đang tải dữ liệu vui lòng đợi !");
         progressDialog.show();
         new CountDownTimer(2000, 1000) {
             // Thời gian còn lại được cập nhật sau mỗi 1 giây (1000 milliseconds)
             public void onTick(long millisUntilFinished) {
             }
+
             public void onFinish() {
                 progressDialog.dismiss();
             }
@@ -98,8 +116,7 @@ public class HomeFragment extends Fragment {
                 view.findViewById(R.id.linearlayout);
         TextView txtWelcome = view.findViewById(R.id.txtWelcome);
         LinearLayout categoryAll = view.findViewById(R.id.categoryAll);
-        txtWelcome.setText("Xin chào! "+ User.getNamewelcome());
-
+        txtWelcome.setText("Xin chào! " + User.getNamewelcome());
 
 
         apiCaller.makeStringRequest(apiCaller.url + "/slideShows", new
@@ -111,14 +128,15 @@ public class HomeFragment extends Fragment {
 // System.out.println(response);
 // Kiểm tra và in ra các phần tử trong mảng JSONArray
                         if (jsonArrayData != null) {
-                            addBanner(view,jsonArrayData);
+                            addBanner(view, jsonArrayData);
                         }
                     }
+
                     @Override
                     public void onError(String errorMessage) {
                     }
                 });
-        apiCaller.makeStringRequest(apiCaller.url+"/products", new
+        apiCaller.makeStringRequest(apiCaller.url + "/products", new
                 ApiCaller.ApiResponseListener<String>() {
                     @Override
                     public void onSuccess(String response) {
@@ -131,7 +149,7 @@ public class HomeFragment extends Fragment {
                             try {
                                 for (int i = 0; i <
                                         jsonArrayDataProduct.length(); i++) {
-                                    addItemProduct( inflater, linearLayout,
+                                    addItemProduct(inflater, linearLayout,
                                             jsonArrayDataProduct.getJSONObject(i));
                                 }
                             } catch (JSONException e) {
@@ -141,6 +159,7 @@ public class HomeFragment extends Fragment {
                             System.out.println("Chuỗi JSON không hợp lệ.");
                         }
                     }
+
                     @Override
                     public void onError(String errorMessage) {
 // Xử lý lỗi nếu có
@@ -157,8 +176,7 @@ public class HomeFragment extends Fragment {
                         // Kiểm tra và in ra các phần tử trong mảng JSONArray
                         if (jsonArrayData != null) {
                             try {
-                                for (int i = 0; i < jsonArrayData.length(); i++)
-                                {
+                                for (int i = 0; i < jsonArrayData.length(); i++) {
                                     addItemCategory(view, inflater,
                                             categoryViewContainer, jsonArrayData.getJSONObject(i));
                                 }
@@ -169,6 +187,7 @@ public class HomeFragment extends Fragment {
                             System.out.println("Chuỗi JSON không hợp lệ.");
                         }
                     }
+
                     @Override
                     public void onError(String errorMessage) {
 // Xử lý lỗi nếu có
@@ -183,7 +202,7 @@ public class HomeFragment extends Fragment {
                     try {
                         for (int i = 0; i <
                                 jsonArrayDataProduct.length(); i++) {
-                            addItemProduct( inflater, linearLayout,
+                            addItemProduct(inflater, linearLayout,
                                     jsonArrayDataProduct.getJSONObject(i));
                         }
                     } catch (JSONException e) {
@@ -211,6 +230,7 @@ public class HomeFragment extends Fragment {
                     throw new RuntimeException(e);
                 }
             }
+
             @Override
             public void onError(String errorMessage) {
                 System.out.print(errorMessage);
@@ -218,40 +238,49 @@ public class HomeFragment extends Fragment {
         });
         return view;
     }
-    private void addItemProduct( LayoutInflater inflater, LinearLayout
-            linearLayout, JSONObject jsonObject){
-        View item = inflater.inflate(R.layout.item_product_home,
-                linearLayout, false);
+
+    private void addItemProduct(LayoutInflater inflater, LinearLayout linearLayout, JSONObject jsonObject) {
+        View item = inflater.inflate(R.layout.item_product_home, linearLayout, false);
         TextView textName = item.findViewById(R.id.txtNameProduct);
         TextView textPrice = item.findViewById(R.id.txtPriceProduct);
         ImageView imgProduct = item.findViewById(R.id.imageProduct);
         LinearLayout touchLinear = item.findViewById(R.id.itemContainer);
         String imageProduct = "";
+
         try {
-            textName.setText( jsonObject.getString("title").toString());
-            textPrice.setText(String.valueOf(jsonObject.getInt("price"))+" k");
+            textName.setText(jsonObject.getString("title").toString());
+
+            // Sử dụng định dạng số để thêm dấu phân cách và đơn vị VNĐ
+            int price = jsonObject.getInt("price");
+            String formattedPrice = String.format("%,d", price);
+            textPrice.setText(formattedPrice + " VNĐ");
+
             imageProduct = jsonObject.getString("photo").toString();
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+
         touchLinear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),
-                        DetailActivity.class);
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra("ItemProduct", jsonObject.toString());
                 startActivity(intent);
             }
         });
+
         Picasso.get()
-                .load(apiCaller.url+"/image/products/"+imageProduct)
+                .load(apiCaller.url + "/image/products/" + imageProduct)
                 .placeholder(R.drawable.load)
                 .error(R.drawable.error_200)
                 .into(imgProduct);
+
         linearLayout.addView(item);
     }
+
+
     private void addItemCategory(View view, LayoutInflater inflater,
-                                 LinearLayout categoryContainer, JSONObject jsonObject){
+                                 LinearLayout categoryContainer, JSONObject jsonObject) {
         View item = inflater.inflate(R.layout.item_category_home,
                 categoryContainer, false);
         TextView textName = item.findViewById(R.id.txtNameCategory);
@@ -260,13 +289,13 @@ public class HomeFragment extends Fragment {
                 item.findViewById(R.id.categoryTouch);
         String imageCategory = "";
         try {
-            textName.setText( jsonObject.getString("title").toString());
+            textName.setText(jsonObject.getString("title").toString());
             imageCategory = jsonObject.getString("photo").toString();
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
         Picasso.get()
-                .load(apiCaller.url+"/image/categories/"+imageCategory)
+                .load(apiCaller.url + "/image/categories/" + imageCategory)
                 .placeholder(R.drawable.load)
                 .error(R.drawable.error_200)
                 .into(imgProduct);
@@ -284,8 +313,8 @@ public class HomeFragment extends Fragment {
                                     jsonArrayDataProduct.getJSONObject(i);
                             JSONObject categoryObject =
                                     jsonObjectItemProduct.getJSONObject("category");
-                            if(txtNameCategoryItem.getText().toString().equals(categoryObject.getString("title"))){
-                                addItemProduct( inflater, linearLayout,
+                            if (txtNameCategoryItem.getText().toString().equals(categoryObject.getString("title"))) {
+                                addItemProduct(inflater, linearLayout,
                                         jsonArrayDataProduct.getJSONObject(i));
                             }
                         }
@@ -299,13 +328,14 @@ public class HomeFragment extends Fragment {
         });
         categoryContainer.addView(item);
     }
-    private void addBanner(View view, JSONArray jsonArray){
+
+    private void addBanner(View view, JSONArray jsonArray) {
         ViewFlipper viewFlipper = view.findViewById(R.id.bannerView);
         for (int i = 0; i < jsonArray.length(); i++) {
             ImageView imageView = new ImageView(getContext());
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             try {
-                Picasso.get().load(apiCaller.url+"/image/slideShows/"+jsonArray.getJSONObject(i).getString("photo")).into(imageView);
+                Picasso.get().load(apiCaller.url + "/image/slideShows/" + jsonArray.getJSONObject(i).getString("photo")).into(imageView);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }

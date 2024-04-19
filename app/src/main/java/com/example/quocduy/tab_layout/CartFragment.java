@@ -140,47 +140,53 @@ public class CartFragment extends Fragment {
         return viewContainer;
     }
     @SuppressLint("SetTextI18n")
-    public void addItemCart(LayoutInflater inflater, LinearLayout
-            cartContainer, String data, int index, int idItemCart){
+    public void addItemCart(LayoutInflater inflater, LinearLayout cartContainer, String data, int index, int idItemCart){
         int priceItem = 0;
-        View item = inflater.inflate(R.layout.item_cart, cartContainer,
-                false);
+        View item = inflater.inflate(R.layout.item_cart, cartContainer, false);
         TextView textName = item.findViewById(R.id.txtNameProduct);
         ImageView imgProduct = item.findViewById(R.id.imageProduct);
-        TextView txtToal = item.findViewById(R.id.txtToal);
+        TextView txtTotal = item.findViewById(R.id.txtToal); // Sửa tên biến này từ txtToal thành txtTotal
         TextView txtQuantity = item.findViewById(R.id.txtQuantity);
-        ImageView deleteItemCart =
-                item.findViewById(R.id.deleteItemCart);
-        TextView priceTotal =
-                viewContainer.findViewById(R.id.priceTotal);
+        ImageView deleteItemCart = item.findViewById(R.id.deleteItemCart);
+        TextView priceTotal = viewContainer.findViewById(R.id.priceTotal);
+
         try {
             JSONObject itemProductData = new JSONObject(data);
             textName.setText(itemProductData.getString("title"));
-            txtToal.setText(itemProductData.getString("priceTotal")+" k");
-            txtQuantity.setText("Số lượng: "+itemProductData.getString("quantity"));
+
+            // Sử dụng định dạng số để thêm dấu phân cách
+            String formattedTotal = String.format("%,d", itemProductData.getInt("priceTotal"));
+            txtTotal.setText(formattedTotal + " VNĐ");
+
+            txtQuantity.setText("Số lượng: " + itemProductData.getString("quantity"));
             priceItem = itemProductData.getInt("priceTotal");
             priceTotalNumber += priceItem;
-            priceTotal.setText(String.valueOf(priceTotalNumber)+" k");
+
+            // Sử dụng định dạng số để thêm dấu phân cách
+            String formattedPriceTotal = String.format("%,d", priceTotalNumber);
+            priceTotal.setText(formattedPriceTotal + " VNĐ");
+
             Picasso.get()
-                    .load(apiCaller.url+"/image/products/"+itemProductData.getString("photo")
-                    )
+                    .load(apiCaller.url + "/image/products/" + itemProductData.getString("photo"))
                     .placeholder(R.drawable.load)
                     .error(R.drawable.error_200)
                     .into(imgProduct);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+
         int finalPriceItem = priceItem;
         int finalIdItemCart = idItemCart;
         deleteItemCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showConfirmationDialog(item,cartContainer,priceTotal,
-                        index, finalPriceItem, finalIdItemCart);
+                showConfirmationDialog(item, cartContainer, priceTotal, index, finalPriceItem, finalIdItemCart);
             }
         });
+
         cartContainer.addView(item);
     }
+
     public void removeItem(View item, LinearLayout cartContainer,TextView
             priceTotal, int index, int priceItem, int idItemCart){
         Log.d("MyFragment", String.valueOf(index));
@@ -189,7 +195,7 @@ public class CartFragment extends Fragment {
             public void onSuccess(String response) {
                 cartContainer.removeView(item);
                 priceTotalNumber -= priceItem;
-                priceTotal.setText(String.valueOf(priceTotalNumber)+" k");
+                priceTotal.setText(String.valueOf(priceTotalNumber)+" VNĐ");
             }
             @Override
             public void onError(String errorMessage) {
